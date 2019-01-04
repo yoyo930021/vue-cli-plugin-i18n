@@ -45,14 +45,14 @@ function assignValuesWithPath (path, value, messages) {
 function getLocales (targetPath) {
   debug('getLocales', targetPath)
   return fs.readdirSync(targetPath).map(locale => {
-    return path.basename(locale, '.json')
+    return path.basename(locale, '.ts')
   })
 }
 
 function getLocaleMessages (targetPath, locales) {
   debug('getLocaleMessages', targetPath, locales)
   return locales.reduce((val, locale) => {
-    const fullPath = `${targetPath}/${locale}.json`
+    const fullPath = `${targetPath}/${locale}.ts`
     val[locale] = require(fullPath)
     delete require.cache[require.resolve(fullPath)]
     return val
@@ -72,7 +72,7 @@ function writeLocaleMessages (targetPath, locale, messages, order) {
   const sortedMessages = sortObject(messages, order)
   debug('writeLocaleMessages after:', sortedMessages)
   return fs.writeFileSync(
-    `${targetPath}/${locale}.json`,
+    `${targetPath}/${locale}.ts`,
     JSON.stringify(sortedMessages, null, 2), { encoding: 'utf8' }
   )
 }
